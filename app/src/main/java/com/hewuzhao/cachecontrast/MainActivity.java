@@ -278,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void diskCacheSave() {
         final List<Integer> list = new ArrayList<>(mCurrentList);
+        mResultSave.setText("");
         mThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -312,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void diskCacheGet() {
+        mResultGet.setText("");
         final List<Integer> list = new ArrayList<>(mCurrentList);
         mThreadHandler.post(new Runnable() {
             @Override
@@ -346,6 +348,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void blobCacheSave() {
+        mResultSave.setText("");
         final List<Integer> list = new ArrayList<>(mCurrentList);
         final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
         mThreadHandler.post(new Runnable() {
@@ -383,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void blobCacheGet() {
+        mResultGet.setText("");
         final List<Integer> list = new ArrayList<>(mCurrentList);
         final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
         mThreadHandler.post(new Runnable() {
@@ -457,6 +461,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void androidGet() {
+        mResultGet.setText("");
         final List<Integer> list = new ArrayList<>(mCurrentList);
         final BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
         decodeOptions.inMutable = true;
