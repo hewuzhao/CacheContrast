@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final long TIME_INTERVAL = 10;
+    private static final long TIME_INTERVAL = 60;
 
     private TextView mResultSave;
     private TextView mResultGet;
