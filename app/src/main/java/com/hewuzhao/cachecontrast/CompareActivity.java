@@ -1,8 +1,5 @@
 package com.hewuzhao.cachecontrast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,8 +10,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.view.View;
-import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.hewuzhao.cachecontrast.blobcache.BlobCache;
 import com.hewuzhao.cachecontrast.blobcache.BlobCacheManager;
@@ -31,18 +29,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author hewuzhao
- * @date 2020-06-07
+ * @date 2020/6/13
  */
-public class MainActivity extends AppCompatActivity {
-
+public class CompareActivity extends AppCompatActivity {
     private static final long TIME_INTERVAL = 60;
 
-    private TextView mResultSave;
-    private TextView mResultGet;
-    private TextView mResultSaveTip;
-    private TextView mResultGetTip;
-    private ScrollView mResultSaveScrollView;
-    private ScrollView mResultGetScrollView;
+    private TextView mResultDisk;
+    private TextView mResultBlob;
+    private TextView mResultAndroid;
 
     private HandlerThread mHandlerThread;
     private Handler mThreadHandler;
@@ -106,54 +100,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_compare);
 
-        mResultSave = findViewById(R.id.result_save);
-        mResultGet = findViewById(R.id.result_get);
-        mResultSaveTip = findViewById(R.id.result_save_tip);
-        mResultGetTip = findViewById(R.id.result_get_tip);
-        mResultSaveScrollView = findViewById(R.id.result_save_scroll);
-        mResultGetScrollView = findViewById(R.id.result_get_scroll);
+        mResultDisk = findViewById(R.id.result_disk);
+        mResultBlob = findViewById(R.id.result_blob);
+        mResultAndroid = findViewById(R.id.result_android);
 
         startThread();
         mCurrentList = mBigDrawableList;
         mCurrentBlobName = "BIG";
 
-        findViewById(R.id.disklrucache_save).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mResultSaveTip.setText("DiskLruCache Save:");
-                diskCacheSave();
+                mResultDisk.setText("DiskLruCache Save Cost Time:\n");
+                mResultBlob.setText("BlobCache Save Cost Time:\n");
+                mResultAndroid.setText("");
+                save();
             }
         });
-        findViewById(R.id.disklrucache_get).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.get).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mResultGetTip.setText("DiskLruCache Get:");
-                diskCacheGet();
-            }
-        });
-
-        findViewById(R.id.blobcache_save).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mResultSaveTip.setText("BlobCache Save:");
-                blobCacheSave();
-            }
-        });
-        findViewById(R.id.blobcache_get).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mResultGetTip.setText("BlobCache Get:");
-                blobCacheGet();
-            }
-        });
-
-        findViewById(R.id.android_get).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mResultGetTip.setText("Android Get:");
-                androidGet();
+                mResultDisk.setText("DiskLruCache Get Cost Time:\n");
+                mResultBlob.setText("BlobCache Get Cost Time:\n");
+                mResultAndroid.setText("Android Get Cost Time:\n");
+                get();
             }
         });
 
@@ -169,14 +141,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        findViewById(R.id.compare).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CompareActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void startThread() {
@@ -185,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
         mThreadHandler = new Handler(mHandlerThread.getLooper());
     }
 
-    private void diskCacheSave() {
+    private void save() {
         final List<Integer> list = new ArrayList<>(mCurrentList);
-        mResultSave.setText("");
+        final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
         mThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -202,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
                     String name = res.getResourceName(id);
                     name = name.split("\\/")[1];
                     final String finalName = name;
+
+
+
+                    // Disk
                     long t1 = System.currentTimeMillis();
                     DiskLruCacheManager.getInstance().putBitmap(finalName, bitmap);
                     long now = System.currentTimeMillis();
@@ -210,20 +178,38 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mResultSave.setText(mResultSave.getText().toString() + finalName + " cost time=" + time + "\n");
-                            mResultSaveScrollView.fullScroll(View.FOCUS_DOWN);
+                            mResultDisk.setText(mResultDisk.getText().toString() + "\n" + finalName + ": " + time);
+                        }
+                    });
+
+
+                    // Blob
+                    t1 = System.currentTimeMillis();
+                    BlobCacheUtil.saveImageByBlobCache(bitmap, finalName, blobCache);
+                    now = System.currentTimeMillis();
+                    final long time2 = now - t1;
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mResultBlob.setText(mResultBlob.getText().toString() + "\n" + finalName + ": " + time2);
                         }
                     });
                 }
+
 
                 mThreadHandler.postDelayed(this, TIME_INTERVAL);
             }
         });
     }
 
-    private void diskCacheGet() {
-        mResultGet.setText("");
+    private void get() {
         final List<Integer> list = new ArrayList<>(mCurrentList);
+        final BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+        decodeOptions.inMutable = true;
+        decodeOptions.inDensity = Bitmap.DENSITY_NONE;
+        decodeOptions.inScaled = false;
+        final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
         mThreadHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -235,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
                 String name = res.getResourceName(id);
                 name = name.split("\\/")[1];
                 final String finalName = name;
+
+                // Disk
                 long t1 = System.currentTimeMillis();
                 Bitmap bitmap = DiskLruCacheManager.getInstance().getBitmap(finalName);
                 long now = System.currentTimeMillis();
@@ -245,72 +233,14 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mResultGet.setText(mResultGet.getText().toString() + finalName + " cost time=" + t + "\n");
-                            mResultGetScrollView.fullScroll(View.FOCUS_DOWN);
+                            mResultDisk.setText(mResultDisk.getText().toString() + "\n" + finalName + ": " + t);
                         }
                     });
                 }
 
-                mThreadHandler.postDelayed(this, TIME_INTERVAL);
-            }
-        });
-    }
 
-    private void blobCacheSave() {
-        mResultSave.setText("");
-        final List<Integer> list = new ArrayList<>(mCurrentList);
-        final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
-        mThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (list.size() == 0) {
-                    return;
-                }
 
-                Resources res = getResources();
-                int id = list.remove(0);
-                Drawable drawable = res.getDrawable(id);
-                if (drawable instanceof BitmapDrawable) {
-                    Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                    String name = res.getResourceName(id);
-                    name = name.split("\\/")[1];
-                    final String finalName = name;
-                    long t1 = System.currentTimeMillis();
-                    BlobCacheUtil.saveImageByBlobCache(bitmap, finalName, blobCache);
-                    long now = System.currentTimeMillis();
-                    final long time = now - t1;
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mResultSave.setText(mResultSave.getText().toString() + finalName + " cost time=" + time + "\n");
-                            mResultSaveScrollView.fullScroll(View.FOCUS_DOWN);
-                        }
-                    });
-                }
-
-                mThreadHandler.postDelayed(this, TIME_INTERVAL);
-            }
-        });
-    }
-
-    private void blobCacheGet() {
-        mResultGet.setText("");
-        final List<Integer> list = new ArrayList<>(mCurrentList);
-        final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
-        mThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (list.size() == 0) {
-                    return;
-                }
-
-                Resources res = getResources();
-                int id = list.remove(0);
-                String name = res.getResourceName(id);
-                name = name.split("\\/")[1];
-                final String finalName = name;
-
+                // Blob
                 if (mDataBuffer == null) {
                     mDataBuffer = new BytesBuffer();
                 }
@@ -333,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                     mKeyMap.put(finalName, key);
                 }
 
-                long t1 = System.currentTimeMillis();
+                t1 = System.currentTimeMillis();
 
                 BytesBuffer bytesBuffer = BlobCacheUtil.getCacheDataByName(blobCache, finalName, mDataBuffer, key, mLookupRequest);
                 if (bytesBuffer != null && bytesBuffer.data != null) {
@@ -341,64 +271,40 @@ public class MainActivity extends AppCompatActivity {
                     if (mPixelsBuffer == null || mPixelsBuffer.capacity() != bytesBuffer.data.length) {
                         mPixelsBuffer = ByteBuffer.allocate(bytesBuffer.data.length);
                     }
-                    Bitmap bitmap = BlobCacheUtil.getCacheBitmapByData(bytesBuffer, mPixelsBuffer, null, mWidthBuffer, mHeightBuffer);
+                    bitmap = BlobCacheUtil.getCacheBitmapByData(bytesBuffer, mPixelsBuffer, null, mWidthBuffer, mHeightBuffer);
 
-                    long now = System.currentTimeMillis();
+                    now = System.currentTimeMillis();
                     final long time = now - t1;
                     if (bitmap == null) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mResultGet.setText(mResultGet.getText().toString() + finalName + " bitmap is null cost time=" + time + "\n");
-                                mResultGetScrollView.fullScroll(View.FOCUS_DOWN);
-                            }
-                        });
+
                     } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mResultGet.setText(mResultGet.getText().toString() + finalName + " cost time=" + time + "\n");
-                                mResultGetScrollView.fullScroll(View.FOCUS_DOWN);
+                                mResultBlob.setText(mResultBlob.getText().toString() + "\n" + finalName + ": " + time);
                             }
                         });
                     }
                 }
 
-                mThreadHandler.postDelayed(this, TIME_INTERVAL);
-            }
-        });
-    }
 
-    private void androidGet() {
-        mResultGet.setText("");
-        final List<Integer> list = new ArrayList<>(mCurrentList);
-        final BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
-        decodeOptions.inMutable = true;
-        decodeOptions.inDensity = Bitmap.DENSITY_NONE;
-        decodeOptions.inScaled = false;
-        mThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (list.size() == 0) {
-                    return;
-                }
-                int id = list.remove(0);
-                Resources res = getResources();
-                String name = res.getResourceName(id);
-                name = name.split("\\/")[1];
-                final String finalName = name;
-                long t1 = System.currentTimeMillis();
+                // Android
+                t1 = System.currentTimeMillis();
 
-                Bitmap bitmap = BitmapFactory.decodeResource(res, id, decodeOptions);
-                long now = System.currentTimeMillis();
+                bitmap = BitmapFactory.decodeResource(res, id, decodeOptions);
+                now = System.currentTimeMillis();
                 final long time = now - t1;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mResultGet.setText(mResultGet.getText().toString() + finalName + " cost time=" + time + "\n");
-                        mResultGetScrollView.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
+                if (bitmap == null) {
+
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mResultAndroid.setText(mResultAndroid.getText().toString() + "\n" + finalName + ": " + time);
+                        }
+                    });
+                }
+
                 mThreadHandler.postDelayed(this, TIME_INTERVAL);
             }
         });

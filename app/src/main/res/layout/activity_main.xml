@@ -12,10 +12,10 @@
         android:layout_width="150dp"
         android:layout_height="30dp"
         android:gravity="start|center_vertical"
-        tools:text="BlobCache Save:"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="BlobCache Save:" />
 
     <ScrollView
         android:id="@+id/result_save_scroll"
@@ -37,10 +37,10 @@
         android:layout_width="150dp"
         android:layout_height="30dp"
         android:gravity="start|center_vertical"
-        tools:text="BlobCache Save:"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="BlobCache Save:" />
 
     <ScrollView
         android:id="@+id/result_get_scroll"
@@ -116,8 +116,17 @@
         android:layout_height="50dp"
         android:text="更换资源"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/compare"
         app:layout_constraintStart_toEndOf="@id/android_get"
+        app:layout_constraintTop_toTopOf="@id/android_get" />
+
+    <Button
+        android:id="@+id/compare"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="对比"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/change"
         app:layout_constraintTop_toTopOf="@id/android_get" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
