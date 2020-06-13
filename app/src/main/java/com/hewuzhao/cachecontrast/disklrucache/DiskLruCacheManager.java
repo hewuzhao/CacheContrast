@@ -1,6 +1,5 @@
 package com.hewuzhao.cachecontrast.disklrucache;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.hewuzhao.cachecontrast.MyApplication;
@@ -35,7 +34,6 @@ public class DiskLruCacheManager {
 
     public void putBitmap(String key, Bitmap bitmap) {
         try {
-//            key = DiskLruCacheUtil.toMd5Key(key);
             DiskLruCache.Editor editor = mDiskLruCache.edit(key);
             if (editor != null) {
                 OutputStream os = editor.newOutputStream(0);
@@ -53,7 +51,6 @@ public class DiskLruCacheManager {
 
     public Bitmap getBitmap(String key) {
         try {
-//            key = DiskLruCacheUtil.toMd5Key(key);
             DiskLruCache.Snapshot snapshot = mDiskLruCache.get(key);
 
             if (snapshot != null) {
