@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -240,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 long now = System.currentTimeMillis();
                 final long t = now - t1;
                 if (bitmap == null) {
-                    Log.e("test5", "DiskLruCache, get bitmap is null.");
+
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -346,13 +345,7 @@ public class MainActivity extends AppCompatActivity {
                     long now = System.currentTimeMillis();
                     final long time = now - t1;
                     if (bitmap == null) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mResultGet.setText(mResultGet.getText().toString() + finalName + " bitmap is null cost time=" + time + "\n");
-                                mResultGetScrollView.fullScroll(View.FOCUS_DOWN);
-                            }
-                        });
+
                     } else {
                         runOnUiThread(new Runnable() {
                             @Override
