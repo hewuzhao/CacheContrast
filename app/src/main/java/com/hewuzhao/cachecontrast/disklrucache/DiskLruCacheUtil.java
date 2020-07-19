@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
@@ -16,32 +14,29 @@ import java.io.OutputStream;
  */
 public class DiskLruCacheUtil {
 
-    public static boolean writeObject(OutputStream fos, Object object) {
-        ObjectOutputStream oos = null;
+    public static boolean writeObject(OutputStream fos, byte[] values) {
         try {
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(object);
-            oos.flush();
+            fos.write(values);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            closeSafely(oos);
         }
         return false;
     }
 
-    public static Object readObject(InputStream inputStream) {
-        ObjectInputStream ois = null;
+    public static byte[] readObject(InputStream in) {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] data = new byte[4096];
+        int count = -1;
         try {
-            ois = new ObjectInputStream(inputStream);
-            return ois.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            closeSafely(ois);
+            while((count = in.read(data, 0, 4096)) != -1) {
+                outStream.write(data, 0, count);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return null;
+        data = null;
+        return outStream.toByteArray();
     }
 
     private static void closeSafely(Closeable closeable) {

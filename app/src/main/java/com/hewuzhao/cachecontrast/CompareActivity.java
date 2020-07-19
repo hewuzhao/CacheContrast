@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2020/6/13
  */
 public class CompareActivity extends AppCompatActivity {
-    private static final long TIME_INTERVAL = 60;
+    private static final long TIME_INTERVAL = 80;
 
     private TextView mResultDisk;
     private TextView mResultBlob;

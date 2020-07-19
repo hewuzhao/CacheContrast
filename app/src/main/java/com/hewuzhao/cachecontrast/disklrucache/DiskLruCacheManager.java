@@ -55,10 +55,7 @@ public class DiskLruCacheManager {
 
             if (snapshot != null) {
                 InputStream inputStream = snapshot.getInputStream(0);
-                byte[] bytes = (byte[]) DiskLruCacheUtil.readObject(inputStream);
-                if (bytes == null) {
-                    return null;
-                }
+                byte[] bytes = DiskLruCacheUtil.readObject(inputStream);
                 return DiskLruCacheUtil.bytes2Bitmap(bytes);
             }
         } catch (Exception e) {
