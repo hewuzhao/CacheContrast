@@ -8,125 +8,83 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/result_save_tip"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:gravity="start|center_vertical"
-        android:textStyle="bold"
+        android:id="@+id/result_disk"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/save"
+        app:layout_constraintEnd_toStartOf="@id/result_blob"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="BlobCache Save:" />
-
-    <ScrollView
-        android:id="@+id/result_save_scroll"
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/disklrucache_save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/result_save_tip">
-
-        <TextView
-            android:id="@+id/result_save"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </ScrollView>
+        tools:text="Result Disk:" />
 
     <TextView
-        android:id="@+id/result_get_tip"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:gravity="start|center_vertical"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="BlobCache Save:" />
-
-    <ScrollView
-        android:id="@+id/result_get_scroll"
-        android:layout_width="150dp"
+        android:id="@+id/result_blob"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/disklrucache_get"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/save"
+        app:layout_constraintEnd_toStartOf="@id/result_android"
+        app:layout_constraintStart_toEndOf="@id/result_disk"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Result Blob:" />
+
+    <TextView
+        android:id="@+id/result_android"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/result_get_tip">
-
-        <TextView
-            android:id="@+id/result_get"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </ScrollView>
-
+        app:layout_constraintStart_toEndOf="@id/result_blob"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Result Android:" />
 
     <Button
-        android:id="@+id/disklrucache_save"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:text="disk_save"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@id/blobcache_save"
-        app:layout_constraintEnd_toStartOf="@id/disklrucache_get"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/result_save_scroll" />
-
-    <Button
-        android:id="@+id/disklrucache_get"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:text="disk_get"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/disklrucache_save"
-        app:layout_constraintTop_toTopOf="@id/disklrucache_save" />
-
-    <Button
-        android:id="@+id/blobcache_save"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:text="blob_save"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@id/android_get"
-        app:layout_constraintEnd_toStartOf="@id/blobcache_get"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/disklrucache_get" />
-
-    <Button
-        android:id="@+id/blobcache_get"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:text="blob_get"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/blobcache_save"
-        app:layout_constraintTop_toTopOf="@id/blobcache_save" />
-
-    <Button
-        android:id="@+id/android_get"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:text="android_get"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/change"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/blobcache_save" />
-
-    <Button
-        android:id="@+id/change"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:text="更换资源"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@id/compare"
-        app:layout_constraintStart_toEndOf="@id/android_get"
-        app:layout_constraintTop_toTopOf="@id/android_get" />
-
-    <Button
-        android:id="@+id/compare"
+        android:id="@+id/save"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:text="对比"
+        android:text="保存"
+        app:layout_constraintBottom_toTopOf="@id/get"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/change"
-        app:layout_constraintTop_toTopOf="@id/android_get" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/get"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="读取"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@id/kb506"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/kb100"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="100kb"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/kb506"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="506kb"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/mb1_1"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="1.1mb"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
