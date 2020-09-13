@@ -55,7 +55,7 @@
         android:layout_height="50dp"
         android:text="读取"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@id/kb506"
+        app:layout_constraintBottom_toTopOf="@id/kb500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -66,25 +66,37 @@
         android:text="100kb"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/kb500"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/kb506"
+        android:id="@+id/kb500"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="506kb"
+        android:text="500kb"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/mb1"
+        app:layout_constraintStart_toEndOf="@id/kb100" />
+
+    <Button
+        android:id="@+id/mb1"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="1mb"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/kb500"
+        app:layout_constraintEnd_toStartOf="@id/mb2" />
+
+    <Button
+        android:id="@+id/mb2"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="2mb"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/mb1_1"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="1.1mb"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/mb1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

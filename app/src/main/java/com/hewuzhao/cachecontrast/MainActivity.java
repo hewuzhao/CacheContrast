@@ -49,33 +49,86 @@ public class MainActivity extends AppCompatActivity {
     private BytesBuffer mHeightBuffer;
     private Map<String, byte[]> mKeyMap;
 
-    private List<Integer> mMb1_1DrawableList = Arrays.asList(
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1,
-            R.drawable.mb_1_1
+    private List<Integer> mMb2DrawableList = Arrays.asList(
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2,
+            R.drawable.mb_2
     );
 
-    private List<Integer> mKb506DrawableList = Arrays.asList(
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506,
-            R.drawable.kb_506
+    private List<Integer> mMb1DrawableList = Arrays.asList(
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1,
+            R.drawable.mb_1
+    );
+
+    private List<Integer> mKb500DrawableList = Arrays.asList(
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500,
+            R.drawable.kb_500
     );
 
     private List<Integer> mKb100DrawableList = Arrays.asList(
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
+            R.drawable.kb_100,
             R.drawable.kb_100,
             R.drawable.kb_100,
             R.drawable.kb_100,
@@ -101,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
         mResultAndroid = findViewById(R.id.result_android);
 
         startThread();
-        mCurrentList = mMb1_1DrawableList;
-        mCurrentBlobName = "1.1_mb";
+        mCurrentList = mKb100DrawableList;
+        mCurrentBlobName = "100_kb";
 
         findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mResultDisk.setText("DiskLruCache Get Cost Time:\n");
                 mResultBlob.setText("BlobCache Get Cost Time:\n");
-                mResultAndroid.setText("Android Get Cost Time:\n");
+                mResultAndroid.setText("Original Android Get Cost Time:\n");
                 get();
             }
         });
@@ -131,36 +184,56 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.kb506).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.kb500).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentList = mKb506DrawableList;
-                mCurrentBlobName = "506_kb";
+                mCurrentList = mKb500DrawableList;
+                mCurrentBlobName = "500_kb";
             }
         });
 
-        findViewById(R.id.mb1_1).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.mb1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentList = mMb1_1DrawableList;
-                mCurrentBlobName = "1.1_mb";
+                mCurrentList = mMb1DrawableList;
+                mCurrentBlobName = "1mb";
+            }
+        });
+
+        findViewById(R.id.mb2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentList = mMb2DrawableList;
+                mCurrentBlobName = "2_mb";
             }
         });
     }
 
     private void startThread() {
-        mHandlerThread = new HandlerThread("cache_thread");
+        /*mHandlerThread = new HandlerThread("cache_thread");
         mHandlerThread.start();
-        mThreadHandler = new Handler(mHandlerThread.getLooper());
+        mThreadHandler = new Handler(mHandlerThread.getLooper());*/
+        mThreadHandler = new Handler();
     }
 
+    private long mTime1, mTime2, mTime3;
+
     private void save() {
+        mTime1 = 0;
+        mTime2 = 0;
         final List<Integer> list = new ArrayList<>(mCurrentList);
         final BlobCache blobCache = BlobCacheManager.getInstance().getBlobCache(mCurrentBlobName, 100, 1024 * 1024 * 400, 1);
         mThreadHandler.post(new Runnable() {
             @Override
             public void run() {
                 if (list.size() == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mResultDisk.setText(mResultDisk.getText().toString() + "\n平均：" + (mTime1 / mCurrentList.size()));
+                            mResultBlob.setText(mResultBlob.getText().toString() + "\n平均：" + (mTime2 / mCurrentList.size()));
+                        }
+                    });
                     return;
                 }
                 int id = list.remove(0);
@@ -180,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                     DiskLruCacheManager.getInstance().putBitmap(finalName, bitmap);
                     long now = System.currentTimeMillis();
                     final long time = now - t1;
+                    mTime1 += time;
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -194,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
                     BlobCacheUtil.saveImageByBlobCache(bitmap, finalName, blobCache);
                     now = System.currentTimeMillis();
                     final long time2 = now - t1;
+                    mTime2 += time2;
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -210,6 +285,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void get() {
+        mTime1 = 0;
+        mTime2 = 0;
+        mTime3 = 0;
         final List<Integer> list = new ArrayList<>(mCurrentList);
         final BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
         decodeOptions.inMutable = true;
@@ -220,6 +298,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (list.size() == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mResultDisk.setText(mResultDisk.getText().toString() + "\n平均：" + (mTime1 / mCurrentList.size()));
+                            mResultBlob.setText(mResultBlob.getText().toString() + "\n平均：" + (mTime2 / mCurrentList.size()));
+                            mResultAndroid.setText(mResultAndroid.getText().toString() + "\n平均：" + (mTime3 / mCurrentList.size()));
+                        }
+                    });
                     return;
                 }
                 int id = list.remove(0);
@@ -234,12 +320,14 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = DiskLruCacheManager.getInstance().getBitmap(finalName);
                 long now = System.currentTimeMillis();
                 final long t = now - t1;
+                mTime1 += t;
 
                 if (bitmap == null) {
                     Log.e("test5", "DiskLruCache, get bitmap is null.");
                 } else {
                     size = byteToMB(bitmap.getByteCount());
                     final String finalSize = size;
+                    Log.i("test5", "size=" + finalSize);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -283,6 +371,7 @@ public class MainActivity extends AppCompatActivity {
 
                     now = System.currentTimeMillis();
                     final long time = now - t1;
+                    mTime2 += time;
 
                     if (bitmap == null) {
 
@@ -305,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
                 bitmap = BitmapFactory.decodeResource(res, id, decodeOptions);
                 now = System.currentTimeMillis();
                 final long time = now - t1;
+                mTime3 += time;
 
                 if (bitmap == null) {
 
