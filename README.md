@@ -1,7 +1,7 @@
 # CacheContrast
-DiskLruCache和BlobCache对bitmap的写入本地和从本地读取的速度对比
+**DiskLruCache**和**BlobCache**对**bitmap**的写入本地和从本地读取的速度对比
 
-所有测试数据是基于Android Studio自带模拟器的Pixel XL机器测试
+注意：所有测试数据是基于Android Studio自带模拟器的Pixel XL机器测试。
 
 
 ### 保存Bitmap到本地
