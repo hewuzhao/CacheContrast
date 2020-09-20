@@ -7,12 +7,12 @@ DiskLruCache和BlobCache对bitmap的写入本地和从本地读取的速度对�
 ### 保存Bitmap到本地
 
 
-<img src="https://github.com/hewuzhao/CacheContrast/blob/master/image/%E5%AD%98%E5%82%A8%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.png" width="270" height="480"/><br/>
+<img src="https://github.com/hewuzhao/CacheContrast/blob/master/image/%E5%AD%98%E5%82%A8%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.png" width="500" height="309"/><br/>
 
 
 ### 读取Bitmap
 
-<img src="https://github.com/hewuzhao/CacheContrast/blob/master/image/%E8%AF%BB%E5%8F%96%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.png" width="270" height="480"/><br/>
+<img src="https://github.com/hewuzhao/CacheContrast/blob/master/image/%E8%AF%BB%E5%8F%96%E6%97%B6%E9%97%B4%E5%AF%B9%E6%AF%94.png" width="500" height="309"/><br/>
 
 
 **总结**
